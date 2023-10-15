@@ -37,7 +37,10 @@ def print_recent_operations(data):
 
         # Маскировка
         masked_number = mask_number(operation.get('from', ''), is_card)
-        masked_account = mask_number(operation.get('to', ''),False)
+        if is_card:
+            masked_account = 'Счет **' + operation.get('to', '')[6:]
+        else:
+            masked_account = mask_number(operation.get('to', ''), False)
 
         amount = operation['operationAmount']['amount']
         currency = operation['operationAmount']['currency']['name']
@@ -47,8 +50,11 @@ def print_recent_operations(data):
         print(f"{amount} {currency}\n")
 
 
+
 # Чтение данных из JSON-файла
-with open('operations.json', 'r') as file:
-    data = json.load(file)
+def read_json_data(file_path):
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    return data
 
 
